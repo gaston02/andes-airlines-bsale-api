@@ -1,18 +1,21 @@
-from fastapi import FastAPI
-from fastapi import Depends
+from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
-from app.db import get_db, ping_db
+from app.core.database import get_db, ping_db
 
-app = FastAPI()
+app = FastAPI(title="Andes Airlines API", version="0.1.0")
 
 @app.get("/")
+def root():
+    return {"message": "Andes Airlines API corriendo con éxito"}
+
+@app.get("/health")
 def health():
-    return {"corriendo con exito Andes Airlines API"}
+    return {"ok": True}
 
 @app.get("/db/ping")
 def db_ping(db: Session = Depends(get_db)):
     try:
         ping_db()
-        return {"ping a BD": True}
+        return {"ok": True}
     except Exception:
         return {"code": 400, "errors": "could not connect to db"}
