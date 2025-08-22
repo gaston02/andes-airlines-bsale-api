@@ -15,4 +15,5 @@ def debug_flight(
     rows = svc.fetch_flight_rows(db, flight_id)
     if not rows:
         return {"code": 404, "data": {}}
-    return {"count": len(rows), "first": dict(rows[0])}
+    resp = svc.build_passengers_response(rows)
+    return resp.model_dump(by_alias=True)
